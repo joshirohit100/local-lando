@@ -1,4 +1,8 @@
 # local-lando
 Lando config for Drupal setup on local
 
-### Adjust the `webroot` directory as per need
+
+# Steps
+ - Add this `.lando.yml` file to your project root directory
+ - Adjust the `webroot` in `.lando.yml` according to your project
+ - Run `lando init`
