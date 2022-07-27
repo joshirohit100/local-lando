@@ -7,6 +7,10 @@ config:
 services:
   database:
     portforward: 3308
+    creds:
+      user: drupal
+      password: drupal
+      database: drupal
   pma:
     type: phpmyadmin
     hosts:
