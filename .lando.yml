@@ -2,9 +2,20 @@ name: Drupal9
 recipe: drupal9
 config:
   webroot: docroot
-  php: '8.0'
+  php: '8.1'
+  xdebug: true
 
 services:
+  appserver:
+    composer_version: 2.4.4
+    xdebug: true
+    app_mount: delegated
+    build_as_root:
+      # XDEBUG is disabled by default but we need it enabled to ensure all configurations are loaded.
+      - rm -f /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && /etc/init.d/apache2 reload
+    overrides:
+      environment:
+        PHP_IDE_CONFIG: "serverName=localdevelopment"
   database:
     portforward: 3308
     creds:
@@ -16,3 +27,15 @@ services:
     hosts:
       - database
 
+tooling:
+  xdebug-on:
+    service: appserver
+    description: Enable xdebug for Apache.
+    cmd: rm -f /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && docker-php-ext-enable xdebug && /etc/init.d/apache2 reload && echo "Xdebug enabled"
+    user: root
+
+  xdebug-off:
+    service: appserver
+    description: Disable xdebug for Apache.
+    cmd: rm -f /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && /etc/init.d/apache2 reload && echo "Xdebug disabled"
+    user: root
